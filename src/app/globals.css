@@ -1,0 +1,207 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============ DESIGN TOKENS ============ */
+:root {
+  --bg: #f8fafc;
+  --bg-2: #eef3fb;
+  --surface: #ffffff;
+  --text: #0b1220;
+  --muted: #475569;
+  --faint: #64748b;
+  --border: rgba(11, 18, 32, 0.09);
+  --border-strong: rgba(11, 18, 32, 0.14);
+  --glass: rgba(255, 255, 255, 0.72);
+  --glass-2: rgba(255, 255, 255, 0.55);
+  --chip: rgba(255, 255, 255, 0.75);
+  --hero-net: #0052cc;
+  --hero-glow: rgba(0, 174, 239, 0.14);
+  --shadow-lg: 0 30px 70px -30px rgba(0, 82, 204, 0.35);
+}
+
+[data-theme="dark"] {
+  --bg: #070c17;
+  --bg-2: #0a1220;
+  --surface: #0f1729;
+  --text: #e8eef7;
+  --muted: #9fb0c7;
+  --faint: #7c8ca6;
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --glass: rgba(16, 25, 44, 0.55);
+  --glass-2: rgba(16, 25, 44, 0.4);
+  --chip: rgba(16, 25, 44, 0.6);
+  --hero-net: #00aeef;
+  --hero-glow: rgba(0, 174, 239, 0.1);
+  --shadow-lg: 0 30px 70px -30px rgba(0, 0, 0, 0.7);
+}
+
+@layer base {
+  * {
+    @apply border-line;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-bg text-content font-sans antialiased;
+    transition: background 0.4s var(--tw-ease, cubic-bezier(0.16, 1, 0.3, 1)),
+      color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  h1, h2, h3, h4 {
+    @apply font-display font-extrabold tracking-tight;
+    line-height: 1.1;
+  }
+  ::selection {
+    background: rgba(0, 174, 239, 0.25);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/* ============ COMPONENT PRIMITIVES ============ */
+@layer components {
+  .container-site {
+    @apply mx-auto w-full max-w-site px-6;
+  }
+
+  .grad-text {
+    @apply bg-accent bg-clip-text text-transparent;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl font-display text-[14.5px] font-semibold
+      transition-all duration-200 ease-smooth cursor-pointer whitespace-nowrap px-5 py-3;
+  }
+  .btn-primary {
+    @apply bg-accent text-white shadow-primary;
+  }
+  .btn-primary:hover {
+    @apply -translate-y-0.5;
+  }
+  .btn-ghost {
+    @apply bg-[color:var(--glass-2)] text-content border border-line-strong;
+  }
+  .btn-ghost:hover {
+    @apply border-azure text-azure;
+  }
+
+  /* Glass card with gradient border on hover */
+  .glass-card {
+    @apply relative overflow-hidden rounded-xl2 border border-line p-7 transition-all duration-300 ease-smooth;
+    background: var(--glass);
+    backdrop-filter: blur(14px);
+  }
+  .glass-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, #0052cc, #00aeef, #0ea5e9);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+  .glass-card:hover {
+    @apply -translate-y-1.5 border-transparent shadow-glow;
+  }
+  .glass-card:hover::before {
+    opacity: 1;
+  }
+
+  .glass-panel {
+    @apply rounded-xl2 border border-line;
+    background: var(--glass);
+    backdrop-filter: blur(14px);
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-xl border border-line px-3.5 py-2 text-[13px] font-semibold text-content;
+    background: var(--chip);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 12px 30px -14px rgba(0, 82, 204, 0.4);
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full border border-line px-3.5 py-2 text-[13px] font-semibold uppercase tracking-wide text-royal;
+    background: var(--chip);
+    backdrop-filter: blur(8px);
+  }
+  [data-theme="dark"] .eyebrow {
+    @apply text-azure;
+  }
+
+  .sec-tag {
+    @apply text-[13px] font-bold uppercase tracking-widest text-azure;
+  }
+}
+
+/* ============ SIGNATURE VISUALS ============ */
+.hero-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(1100px 600px at 78% 20%, var(--hero-glow), transparent 60%);
+}
+
+/* rotating conic ring */
+.orb {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 290px;
+  height: 290px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #0052cc, #00aeef, #0ea5e9, #0052cc);
+  filter: blur(2px);
+  opacity: 0.9;
+  -webkit-mask: radial-gradient(circle, transparent 58%, #000 59%, #000 63%, transparent 64%);
+  mask: radial-gradient(circle, transparent 58%, #000 59%, #000 63%, transparent 64%);
+}
+.orb--two {
+  width: 210px;
+  height: 210px;
+  opacity: 0.7;
+}
+
+/* partner marquee mask */
+.marquee-mask {
+  overflow: hidden;
+  position: relative;
+  -webkit-mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-spin-slow,
+  .animate-marquee,
+  .animate-pulse-ring {
+    animation: none !important;
+  }
+  .marquee-track {
+    flex-wrap: wrap;
+    justify-content: center;
+    width: auto !important;
+  }
+}
+
+/* form focus */
+.field-input {
+  @apply w-full rounded-xl border border-line-strong bg-surface px-3.5 py-3 text-content text-[0.92rem] transition;
+}
+.field-input:focus {
+  @apply outline-none border-azure;
+  box-shadow: 0 0 0 3px rgba(0, 174, 239, 0.15);
+}
