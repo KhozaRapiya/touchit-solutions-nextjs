@@ -135,11 +135,38 @@ register `codeInput()` in `sanity.config.ts`, and add `{ type: "code" }` to
   author, published time, tags) on each post.
 - Set `NEXT_PUBLIC_SITE_URL` so canonicals, OG URLs and the sitemap are absolute.
 
+## Contact form
+
+`src/components/sections/Contact.tsx` posts to **`src/app/api/contact/route.ts`**,
+which emails the enquiry via **Resend**. The route validates required fields and
+email format, escapes HTML, sets `reply_to` to the sender, and includes a hidden
+**honeypot** field that silently absorbs bot submissions.
+
+Set these env vars to enable delivery:
+
+```bash
+RESEND_API_KEY=re_xxxxxxxx          # https://resend.com/api-keys
+CONTACT_TO_EMAIL=info@touchitsolutions.co.za
+CONTACT_FROM_EMAIL="TouchIT Website <website@touchitsolutions.co.za>"
+```
+
+`CONTACT_FROM_EMAIL` must use a domain **verified in Resend**. Without
+`RESEND_API_KEY` the form still succeeds and logs the submission server-side, so
+local development works with no credentials.
+
+## Social share image
+
+`public/og-image.png` (1200×630) is referenced from the root metadata, the blog
+listing, and each post (posts use their own hero image when they have one, and
+fall back to this). Set `NEXT_PUBLIC_SITE_URL` so the URL resolves absolutely —
+crawlers reject relative image paths.
+
+To preview how links will look, use Facebook's Sharing Debugger or LinkedIn's
+Post Inspector; both let you force a re-scrape after changes.
+
 ## Still needs a backend
 
 - **Careers** — vacancies + application flow.
-- **Contact form** — connect `Contact.tsx`'s `onSubmit` to an API route, CRM or
-  email service (e.g. Resend). It currently shows a local confirmation only.
 - **Client portal / support tickets / live chat / AI assistant** — auth + services.
 
 Deploy to **Vercel** for zero-config hosting; add the env vars in the project settings.

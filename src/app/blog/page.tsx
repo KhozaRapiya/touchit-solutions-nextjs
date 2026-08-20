@@ -18,6 +18,7 @@ export const metadata: Metadata = {
     description: "Practical ICT insights for South African organisations.",
     type: "website",
     url: absoluteUrl("/blog"),
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: siteConfig.name }],
   },
 };
 
