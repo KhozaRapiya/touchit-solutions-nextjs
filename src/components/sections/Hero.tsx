@@ -8,7 +8,7 @@ const chips = [
   { icon: Shield, label: "Cybersecurity", pos: "right-[-8%] top-[26%]", delay: "1s" },
   { icon: LayoutGrid, label: "Microsoft 365", pos: "left-[-8%] bottom-[20%]", delay: ".5s" },
   { icon: Cpu, label: "IoT", pos: "right-[2%] bottom-[2%]", delay: "1.6s" },
-  { icon: Sparkles, label: "AI", pos: "left-[34%] top-[48%]", delay: "2.1s" },
+  { icon: Sparkles, label: "AI", pos: "left-[8%] top-[52%]", delay: "2.1s" },
 ];
 
 export function Hero() {

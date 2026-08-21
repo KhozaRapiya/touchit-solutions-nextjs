@@ -1,8 +1,9 @@
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { partners } from "@/data/site";
+import { partners, type Partner } from "@/data/site";
 
-function Row({ items, reverse = false }: { items: string[]; reverse?: boolean }) {
+function Row({ items, reverse = false }: { items: Partner[]; reverse?: boolean }) {
   const doubled = [...items, ...items];
   return (
     <div className="marquee-mask">
@@ -12,10 +13,17 @@ function Row({ items, reverse = false }: { items: string[]; reverse?: boolean })
       >
         {doubled.map((p, i) => (
           <div
-            key={p + i}
-            className="glass-panel flex h-20 min-w-[170px] items-center justify-center font-display text-[1.05rem] font-bold tracking-tight text-muted transition duration-300 hover:scale-105 hover:border-azure hover:text-royal dark:hover:text-azure"
+            key={p.name + i}
+            className="flex h-24 min-w-[190px] items-center justify-center rounded-2xl border border-line bg-white p-5 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-glow"
+            title={p.name}
           >
-            {p}
+            <Image
+              src={p.logo}
+              alt={`${p.name} partner logo`}
+              width={220}
+              height={92}
+              className="h-auto max-h-[56px] w-auto max-w-[150px] object-contain"
+            />
           </div>
         ))}
       </div>

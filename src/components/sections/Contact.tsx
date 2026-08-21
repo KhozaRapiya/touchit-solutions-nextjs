@@ -18,7 +18,8 @@ const serviceOptions = [
 ];
 
 export function Contact() {
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const mapsHref = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteConfig.mapsQuery)}`;
   const info: { icon: typeof Phone; title: string; value: string; href?: string; external?: boolean }[] = [
@@ -33,12 +34,35 @@ export function Contact() {
     { icon: Clock, title: "Business Hours", value: siteConfig.hours },
   ];
 
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: wire to an API route / CRM / email service.
-    setSent(true);
-    e.currentTarget.reset();
-    setTimeout(() => setSent(false), 6000);
+    const form = e.currentTarget;
+    const data = Object.fromEntries(new FormData(form).entries());
+
+    setStatus("sending");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const json = (await res.json()) as { error?: string };
+
+      if (!res.ok) {
+        setErrorMsg(json.error || "Something went wrong. Please try again.");
+        setStatus("error");
+        return;
+      }
+
+      form.reset();
+      setStatus("sent");
+      setTimeout(() => setStatus("idle"), 8000);
+    } catch {
+      setErrorMsg("Network error. Please check your connection and try again.");
+      setStatus("error");
+    }
   };
 
   return (
@@ -80,23 +104,23 @@ export function Contact() {
             <form onSubmit={onSubmit} className="glass-panel p-[30px]">
               <div className="grid gap-3.5 sm:grid-cols-2">
                 <Field label="Full name">
-                  <input required placeholder="Your name" className="field-input" />
+                  <input name="name" required placeholder="Your name" className="field-input" />
                 </Field>
                 <Field label="Company">
-                  <input placeholder="Organisation" className="field-input" />
+                  <input name="company" placeholder="Organisation" className="field-input" />
                 </Field>
               </div>
               <div className="mt-3.5 grid gap-3.5 sm:grid-cols-2">
                 <Field label="Email">
-                  <input type="email" required placeholder="you@company.co.za" className="field-input" />
+                  <input name="email" type="email" required placeholder="you@company.co.za" className="field-input" />
                 </Field>
                 <Field label="Phone">
-                  <input type="tel" placeholder="+27..." className="field-input" />
+                  <input name="phone" type="tel" placeholder="+27..." className="field-input" />
                 </Field>
               </div>
               <div className="mt-3.5">
                 <Field label="Service of interest">
-                  <select className="field-input">
+                  <select name="service" className="field-input">
                     {serviceOptions.map((o) => (
                       <option key={o}>{o}</option>
                     ))}
@@ -105,18 +129,50 @@ export function Contact() {
               </div>
               <div className="mt-3.5">
                 <Field label="How can we help?">
-                  <textarea placeholder="Tell us about your project or requirement..." className="field-input min-h-[110px] resize-y" />
+                  <textarea
+                    name="message"
+                    required
+                    placeholder="Tell us about your project or requirement..."
+                    className="field-input min-h-[110px] resize-y"
+                  />
                 </Field>
               </div>
 
-              <button type="submit" className="btn btn-primary mt-2 w-full">
-                Send Message
+              {/* Honeypot — hidden from users, catches bots */}
+              <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute left-[-9999px] h-0 w-0 opacity-0"
+              />
+
+              <button type="submit" disabled={status === "sending"} className="btn btn-primary mt-2 w-full disabled:opacity-70">
+                {status === "sending" ? "Sending..." : "Send Message"}
               </button>
 
-              {sent ? (
-                <div className="mt-3.5 rounded-[11px] border px-4 py-3 text-[0.9rem] font-medium text-success"
-                  style={{ background: "rgba(16,185,129,.12)", borderColor: "rgba(16,185,129,.4)" }}>
-                  Thanks — your enquiry has been captured. A TouchIT consultant will be in touch shortly.
+              {status === "sent" ? (
+                <div
+                  role="status"
+                  className="mt-3.5 rounded-[11px] border px-4 py-3 text-[0.9rem] font-medium text-success"
+                  style={{ background: "rgba(16,185,129,.12)", borderColor: "rgba(16,185,129,.4)" }}
+                >
+                  Thanks — your enquiry has been sent. A TouchIT consultant will be in touch shortly.
+                </div>
+              ) : null}
+
+              {status === "error" ? (
+                <div
+                  role="alert"
+                  className="mt-3.5 rounded-[11px] border px-4 py-3 text-[0.9rem] font-medium"
+                  style={{ background: "rgba(239,68,68,.12)", borderColor: "rgba(239,68,68,.4)", color: "#ef4444" }}
+                >
+                  {errorMsg}{" "}
+                  <a href={`mailto:${siteConfig.email}`} className="underline">
+                    Email us directly
+                  </a>
+                  .
                 </div>
               ) : null}
             </form>
