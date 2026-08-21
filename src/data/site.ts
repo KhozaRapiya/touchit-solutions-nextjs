@@ -114,25 +114,24 @@ export const industries: string[] = [
   "Professional Services",
 ];
 
-export const partners: string[] = [
-  "Microsoft",
-  "Microsoft CSP",
-  "Lenovo",
-  "HP",
-  "Dell",
-  "Acer",
-  "Cisco",
-  "Adobe",
-  "Sage",
-  "Kaspersky",
-  "Mustek",
-  "Pinnacle",
-  "Rectron",
-  "Axiz",
-  "Tarsus",
-  "4Sight",
-  "DDS",
-  "Dynamics GP",
+export interface Partner {
+  name: string;
+  logo: string;
+}
+
+export const partners: Partner[] = [
+  { name: "Microsoft", logo: "/partners/microsoft.png" },
+  { name: "Microsoft Cloud Solution Provider", logo: "/partners/microsoft-csp.png" },
+  { name: "HP", logo: "/partners/hp.png" },
+  { name: "Dell Technologies", logo: "/partners/dell.png" },
+  { name: "Lenovo", logo: "/partners/lenovo.png" },
+  { name: "Acer", logo: "/partners/acer.png" },
+  { name: "Cisco", logo: "/partners/cisco.png" },
+  { name: "Adobe", logo: "/partners/adobe.png" },
+  { name: "Sage", logo: "/partners/sage.png" },
+  { name: "Veeam", logo: "/partners/veeam.png" },
+  { name: "Kaspersky", logo: "/partners/kaspersky.png" },
+  { name: "Fortinet", logo: "/partners/fortinet.png" },
 ];
 
 export interface ClientStory {
@@ -140,6 +139,7 @@ export interface ClientStory {
   industry: string;
   services: string;
   outcome: string;
+  logo: string;
 }
 
 export const clientStories: ClientStory[] = [
@@ -148,43 +148,70 @@ export const clientStories: ClientStory[] = [
     industry: "Government",
     services: "ICT infrastructure, Microsoft 365 rollout, managed support",
     outcome: "Modernised the digital workplace and improved cross-department collaboration and security posture.",
+    logo: "/clients/ec-premier.png",
   },
   {
     name: "Office of the Chief Justice",
     industry: "Government / Justice",
     services: "Network infrastructure, endpoint security, help desk",
     outcome: "Hardened endpoint protection and delivered responsive support across office locations.",
+    logo: "/clients/chief-justice.png",
   },
   {
     name: "Department of Water & Sanitation",
     industry: "Public Sector",
     services: "Cloud migration, backup & disaster recovery",
     outcome: "Migrated key workloads to the cloud with tested recovery, reducing downtime risk.",
+    logo: "/clients/water-sanitation.png",
   },
   {
     name: "SASSETA",
     industry: "Education / SETA",
     services: "Microsoft Dynamics GP, reporting, training",
     outcome: "Streamlined finance operations and equipped staff through targeted GP training.",
+    logo: "/clients/sasseta.png",
   },
   {
     name: "Konstruct SGN",
     industry: "Construction",
     services: "Hardware supply, networking, technical support",
     outcome: "Deployed reliable site connectivity and equipment with proactive maintenance.",
+    logo: "/clients/konstruct.png",
   },
   {
     name: "Eastern Cape Department of Health",
     industry: "Healthcare",
     services: "Infrastructure, cybersecurity, managed IT",
     outcome: "Strengthened security and stabilised infrastructure for critical services.",
+    logo: "/clients/ec-health.png",
   },
   {
     name: "Uluyolo Consultants",
     industry: "Professional Services",
     services: "Digital workplace, cloud, hosting",
     outcome: "Enabled a mobile, cloud-first way of working with secure hosting.",
+    logo: "/clients/uluyolo.png",
   },
+];
+
+/** Full roster of client logos for the "trusted by" wall. */
+export const clientLogos: { name: string; logo: string }[] = [
+  { name: "Eastern Cape Office of the Premier", logo: "/clients/ec-premier.png" },
+  { name: "Eastern Cape Department of Health", logo: "/clients/ec-health.png" },
+  { name: "Office of the Chief Justice", logo: "/clients/chief-justice.png" },
+  { name: "Department of Water & Sanitation", logo: "/clients/water-sanitation.png" },
+  { name: "SASSETA", logo: "/clients/sasseta.png" },
+  { name: "Walter Sisulu University", logo: "/clients/wsu.png" },
+  { name: "King Sabata Dalindyebo Municipality", logo: "/clients/ksd.png" },
+  { name: "OR Tambo District Municipality", logo: "/clients/or-tambo.png" },
+  { name: "Moses Kotane Research Institute", logo: "/clients/moses-kotane.png" },
+  { name: "Konstruct SGN", logo: "/clients/konstruct.png" },
+  { name: "Uluyolo Consultants", logo: "/clients/uluyolo.png" },
+  { name: "Isibenya Property Developers", logo: "/clients/isibenya.png" },
+  { name: "Anathi Xhobani", logo: "/clients/anathi.png" },
+  { name: "Bayathetha Holdings", logo: "/clients/bayathetha.png" },
+  { name: "NFH", logo: "/clients/nfh.png" },
+  { name: "NPG", logo: "/clients/npg.png" },
 ];
 
 export interface Testimonial {
